@@ -10,10 +10,13 @@ RUN /install_hashicorp_tool "terraform" "$TF_VERSION"
 RUN /install_hashicorp_tool "vault" "$VAULT_VERSION"
 RUN /install_hashicorp_tool "consul" "$CONSUL_VERSION"
 
+FROM wata727/tflint AS tflint
+
 # Now copy the binary over into a smaller base image
 FROM alpine:latest
 RUN apk add --update --no-cache git bash openssh curl jq
 COPY --from=dudewheresmy /go/bin/dudewheresmy /bin/dudewheresmy
+COPY --from=tflint /usr/local/bin/tflint /bin/tflint
 COPY --from=installer /bin/terraform /bin/terraform
 COPY --from=installer /bin/vault /bin/vault
 COPY --from=installer /bin/consul /bin/consul
