@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+# Script for outputing terraform auto.tfvars files for use by the consul provider
+
+if [ -e /bin/vault ]; then
+  if [[ "$VAULT_ADDR" ]]; then
+    CONSUL_JSON=$(vault read -format json -field data secret/consul)
+    HTTP_AUTH=$(echo $CONSUL_JSON | jq -r .http_auth)
+    HTTP_ADDR=$(echo $CONSUL_JSON | jq -r .http_addr)
+    echo "consul_http_auth = \"$HTTP_AUTH\"" > _consul_http_auth.auto.tfvars
+    echo "consul_http_addr = \"$HTTP_ADDR\"" > _consul_http_addr.auto.tfvars
+  else
+    echo "MISSING VAULT_ADDR"
+  fi
+fi

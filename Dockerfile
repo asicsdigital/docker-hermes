@@ -22,5 +22,6 @@ COPY --from=installer /bin/vault /bin/vault
 COPY --from=installer /bin/consul /bin/consul
 COPY scripts/set-vault-token /bin/set-vault-token
 COPY scripts/get-consul-htpasswd /bin/get-consul-htpasswd
+COPY scripts/get-consul-http-auth /bin/get-consul-http-auth
 WORKDIR /root
 ENTRYPOINT ["/bin/sh"]
