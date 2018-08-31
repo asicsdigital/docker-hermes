@@ -11,5 +11,6 @@ if [ -e /bin/vault ]; then
     echo "consul_http_addr = \"$HTTP_ADDR\"" > _consul_http_addr.auto.tfvars
   else
     echo "MISSING VAULT_ADDR"
+    exit 1
   fi
 fi

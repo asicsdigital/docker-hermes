@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Script for outputting $HOME/.aws/credentials for use by terraform aws provider
+
+VAULT_AWS_SECRET_ENGINE_ROLE="${VAULT_AWS_SECRET_ENGINE_ROLE:-hermes}"
+
+if [ -e /bin/vault ]; then
+  if [[ "$VAULT_ADDR" ]]; then
+    mkdir -p $HOME/.aws
+    # $HOME/.aws/credentials
+
+    _VAULT_DATA=$(vault read -format json aws/creds/${VAULT_AWS_SECRET_ENGINE_ROLE})
+    _LEASE_ID=$(echo $_VAULT_DATA | jq -r .lease_id)
+    echo "VAULT_LEASE_ID=\"${_LEASE_ID}\"" >> $HOME/.env
+    _ACCESS_KEY=$(echo $_VAULT_DATA | jq -r .data.access_key)
+    _SECRET_KEY=$(echo $_VAULT_DATA | jq -r .data.secret_key)
+
+    _CF=$(cat <<EOT
+[default]
+aws_access_key_id = ${_ACCESS_KEY}
+aws_secret_access_key = ${_SECRET_KEY}
+EOT
+   )
+    echo "${_CF}" > $HOME/.aws/credentials
+    echo "$HOME/.aws/credentials has been created"
+    sleep 10
+  else
+    echo "MISSING VAULT_ADDR"
+    exit 1
+  fi
+fi

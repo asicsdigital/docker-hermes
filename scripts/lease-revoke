@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+# Script for revoking vault leases sourced in from .env files
+
+if [ -e $HOME/.env ]; then
+  source $HOME/.env
+else
+  echo "MISSING .env FILE"
+  exit 1
+fi
+
+if [ -e /bin/vault ]; then
+  if [[ "$VAULT_ADDR" ]]; then
+    vault lease revoke $VAULT_LEASE_ID
+  else
+    echo "MISSING VAULT_ADDR"
+    exit 1
+  fi
+fi
