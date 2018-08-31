@@ -122,12 +122,12 @@ jobs:
       - run:
           <<: *docker_login
       - run:
-          working_directory: ~/0.X
+          working_directory: ~/project/0.X
           environment:
             TAG: core
           <<: *build_branches
       - run:
-          working_directory: ~/0.X/terraform
+          working_directory: ~/project/0.X/terraform
           environment:
             TAG: terraform
           <<: *build_branches
