@@ -13,22 +13,25 @@ build_latest: &build_latest
   name: "Docker Build Latest"
   command: |
     docker build --build-arg TF_VERSION=$TF_VERSION --tag $IMAGE_NAME:latest .
-    docker push $IMAGE_NAME:latest
+
+#    docker push $IMAGE_NAME:latest
 
 build_image: &build_image
   name: "Docker Build Image"
   command: |
     echo "Building version $TF_VERSION with Docker Tag of $TAG"
     docker build --build-arg TF_VERSION=$TF_VERSION --tag $IMAGE_NAME:$TAG .
-    docker push $IMAGE_NAME:$TAG
+
+#    docker push $IMAGE_NAME:$TAG
   requires:
       - "Docker Build Latest"
 
 build_branches: &build_branches
   name: "Docker Build Feature Branch"
   command: |
-    docker build -t $IMAGE_NAME:$CIRCLE_USERNAME-$CIRCLE_SHA1 .
-    docker push $IMAGE_NAME:$CIRCLE_USERNAME-$CIRCLE_SHA1
+    docker build -t $IMAGE_NAME:$CIRCLE_USERNAME-$TAG-$CIRCLE_SHA1 .
+
+#    docker push $IMAGE_NAME:$CIRCLE_USERNAME-$TAG-$CIRCLE_SHA1
 
 project_env_vars: &project_env_vars
   environment:
@@ -110,7 +113,7 @@ jobs:
             TAG: 0.10.8
           <<: *build_image
 
-  build_branch:
+  build_branch_0.X:
     <<: *docker_image
     <<: *project_env_vars
     steps:
@@ -119,4 +122,12 @@ jobs:
       - run:
           <<: *docker_login
       - run:
+          working_directory: ~/0.X
+          environment:
+            TAG: core
+          <<: *build_branches
+      - run:
+          working_directory: ~/0.X/terraform
+          environment:
+            TAG: terraform
           <<: *build_branches
