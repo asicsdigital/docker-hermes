@@ -47,7 +47,7 @@ workflows:
             branches:
               only: master
 
-      - build_branch:
+      - build_branch_0.X:
           context: org-global
           filters:
             branches:
