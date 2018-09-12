@@ -22,10 +22,10 @@ build_local: &build_local
     echo "Building version $TF_VERSION with Docker Tag of $TAG"
     docker build --tag hermes .
 
-build_image: &build_image
-  name: "Docker Build Image"
+build_terraform_image: &build_terraform_image
+  name: "Docker Build Hermes Terraform Image"
   command: |
-    echo "Building version $TF_VERSION with Docker Tag of $TAG"
+    echo "Building Image $IMAGE_NAME:$TAG"
     docker build --build-arg TF_VERSION=$TF_VERSION --tag $IMAGE_NAME:$TAG .
 
 #    docker push $IMAGE_NAME:$TAG
@@ -76,48 +76,48 @@ jobs:
       - run:
           environment:
             TF_VERSION: 0.11.8
-            TAG: 0.11.8
-          <<: *build_image
+            TAG: terraform-0.11.8
+          <<: *build_terraform_image
       - run:
           environment:
             TF_VERSION: 0.11.7
-            TAG: 0.11.7
-          <<: *build_image
+            TAG: terraform-0.11.7
+          <<: *build_terraform_image
       - run:
           environment:
             TF_VERSION: 0.11.6
-            TAG: 0.11.6
-          <<: *build_image
+            TAG: terraform-0.11.6
+          <<: *build_terraform_image
       - run:
           environment:
             TF_VERSION: 0.11.5
-            TAG: 0.11.5
-          <<: *build_image
+            TAG: terraform-0.11.5
+          <<: *build_terraform_image
       - run:
           environment:
             TF_VERSION: 0.11.4
-            TAG: 0.11.4
-          <<: *build_image
+            TAG: terraform-0.11.4
+          <<: *build_terraform_image
       - run:
           environment:
             TF_VERSION: 0.11.3
-            TAG: 0.11.3
-          <<: *build_image
+            TAG: terraform-0.11.3
+          <<: *build_terraform_image
       - run:
           environment:
             TF_VERSION: 0.11.2
-            TAG: 0.11.2
-          <<: *build_image
+            TAG: terraform-0.11.2
+          <<: *build_terraform_image
       - run:
           environment:
             TF_VERSION: 0.11.1
-            TAG: 0.11.1
-          <<: *build_image
+            TAG: terraform-0.11.1
+          <<: *build_terraform_image
       - run:
           environment:
             TF_VERSION: 0.10.8
-            TAG: 0.10.8
-          <<: *build_image
+            TAG: terraform-0.10.8
+          <<: *build_terraform_image
 
   build_0.X:
     <<: *docker_image
@@ -141,3 +141,9 @@ jobs:
           environment:
             TAG: terraform
           <<: *build_branches
+      # Test of this block
+      - run:
+          environment:
+            TF_VERSION: 0.10.8
+            TAG: 0.10.8
+          <<: *build_terraform_image
