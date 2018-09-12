@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+# Script for install package dependencies to hermes images
+# shellcheck shell=bash
+
+# Package to install with apk
+APK_PKGS="git bash openssh curl jq"
+
+if [ -e /sbin/apk ]; then
+  /sbin/apk add --update --no-cache $APK_PKGS
+fi

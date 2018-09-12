@@ -10,4 +10,4 @@ COPY --from=tflint /usr/local/bin/tflint /opt/hermes/bin/tflint
 COPY --from=installer /software/terraform /opt/hermes/bin/terraform
 COPY scripts/* /opt/hermes/bin/
 WORKDIR /root
-ENTRYPOINT ["/bin/sh"]
+ENTRYPOINT ["/bin/bash"]

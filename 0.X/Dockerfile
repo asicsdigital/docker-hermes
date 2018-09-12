@@ -14,7 +14,7 @@ COPY --from=dudewheresmy /go/bin/dudewheresmy /opt/hermes/bin/dudewheresmy
 COPY --from=installer /software/vault /opt/hermes/bin/vault
 COPY --from=installer /software/consul /opt/hermes/bin/consul
 COPY scripts/* /opt/hermes/bin/
-RUN apk add --update --no-cache git bash openssh curl jq # factor this out into a script
+RUN /opt/hermes/bin/install-hermes-deps
 WORKDIR /root
 ENV PATH="/opt/hermes/bin:${PATH}"
-ENTRYPOINT ["/bin/sh"]
+ENTRYPOINT ["/bin/bash"]
