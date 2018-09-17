@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
 # Script for revoking vault leases sourced in from .env files
+set -e
+set -o pipefail
 
 if [ -e $HOME/.env ]; then
   source $HOME/.env

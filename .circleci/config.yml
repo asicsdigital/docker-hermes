@@ -21,6 +21,7 @@ build_local: &build_local
   command: |
     echo "Building version $TF_VERSION with Docker Tag of $TAG"
     docker build --tag hermes .
+# We never push this image. It is used for caching layers in CI
 
 build_terraform_image: &build_terraform_image
   name: "Docker Build Hermes Terraform Image"
@@ -47,7 +48,7 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - build_and_deploy:
+      - build_and_deploy_0.X:
           context: org-global
           filters:
             branches:
@@ -61,7 +62,7 @@ workflows:
 
 version: 2
 jobs:
-  build_and_deploy:
+  build_and_deploy_0.X:
     <<: *docker_image
     <<: *project_env_vars
     steps:
@@ -114,11 +115,13 @@ jobs:
             TAG: terraform-0.11.1
           <<: *build_terraform_image
       - run:
+          working_directory: ~/project/0.X/terraform
           environment:
             TF_VERSION: 0.10.8
             TAG: terraform-0.10.8
           <<: *build_terraform_image
 
+  # trigger build_0.X off the tag not branch
   build_0.X:
     <<: *docker_image
     <<: *project_env_vars

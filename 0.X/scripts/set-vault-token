@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
+set -e
+set -o pipefail
 
 approle_authenticate () {
   curl -s \

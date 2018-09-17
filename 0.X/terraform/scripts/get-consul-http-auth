@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash
 # Script for outputing terraform auto.tfvars files for use by the consul provider
+set -e
+set -o pipefail
 
 if [ -e /bin/vault ]; then
   if [[ "$VAULT_ADDR" ]]; then
