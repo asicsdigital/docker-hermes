@@ -1,5 +1,4 @@
-FROM golang:1.10 AS dudewheresmy
-RUN CGO_ENABLED=0 GOOS=linux go get -v github.com/asicsdigital/dudewheresmy
+FROM asicsdigital/dudewheresmy AS dudewheresmy
 
 # Download and verify the integrity of the download first
 FROM sethvargo/hashicorp-installer:0.1.3 AS installer
@@ -10,7 +9,7 @@ RUN /install-hashicorp-tool "consul" "$CONSUL_VERSION"
 
 FROM alpine:3.8
 RUN mkdir -p /opt/hermes/bin
-COPY --from=dudewheresmy /go/bin/dudewheresmy /opt/hermes/bin/dudewheresmy
+COPY --from=dudewheresmy /usr/bin/dudewheresmy /opt/hermes/bin/dudewheresmy
 COPY --from=installer /software/vault /opt/hermes/bin/vault
 COPY --from=installer /software/consul /opt/hermes/bin/consul
 COPY scripts/* /opt/hermes/bin/
