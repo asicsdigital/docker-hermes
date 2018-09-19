@@ -29,7 +29,7 @@ build_core_tagged: &build_core_tagged
     docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | sed 's/v//')
     docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1,2 | sed 's/v//')
     docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1   | sed 's/v//')
-# push tags
+    echo "push tags"
     docker push $IMAGE_NAME:$CIRCLE_TAG
     docker push $IMAGE_NAME:$(echo $CIRCLE_TAG | sed 's/v//')
     docker push $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1,2 | sed 's/v//')
@@ -187,10 +187,6 @@ jobs:
       - setup_remote_docker
       - run:
           <<: *docker_login
-      - run:
-          working_directory: ~/project/0.X
-          environment:
-          <<: *build_local
       - run:
           working_directory: ~/project/0.X
           environment:
