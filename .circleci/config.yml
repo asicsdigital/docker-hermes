@@ -72,7 +72,8 @@ workflows:
             tags:
               only: stable-test
             branches:
-              ignore: /.*/
+              only: tfhartmann/updates_for_building_child_images
+              #ignore: /.*/
 
 version: 2
 jobs:
