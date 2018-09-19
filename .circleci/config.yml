@@ -22,12 +22,20 @@ build_core_stable: &build_core_stable
     docker build --tag $IMAGE_NAME:stable .
     docker push $IMAGE_NAME:stable
 
-build_local: &build_local
-  name: "Docker Build Local Image"
+build_core_tagged: &build_core_tagged
+  name: "Docker build and push asicsdigital/hermes tagged release"
   command: |
-    echo "Building version $TF_VERSION with Docker Tag of $TAG"
-    docker build --tag hermes .
-# We never push this image. It is used for caching layers in CI
+    docker build --tag $IMAGE_NAME:$CIRCLE_TAG .
+    docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | sed 's/v//')
+    docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1,2 | sed 's/v//')
+    docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1   | sed 's/v//')
+# push tags
+    docker push $IMAGE_NAME:$CIRCLE_TAG
+    docker push $IMAGE_NAME:$(echo $CIRCLE_TAG | sed 's/v//')
+    docker push $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1,2 | sed 's/v//')
+    docker push $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1   | sed 's/v//')
+
+
 
 build_terraform_image: &build_terraform_image
   name: "Docker Build Hermes Terraform Image"
@@ -66,11 +74,19 @@ workflows:
             branches:
               ignore: master
 
-      - build-stable:
+      - deploy-stable:
           context: org-global
           filters:
             tags:
-              only: /^stable-test/
+              only: stable
+            branches:
+              ignore: /.*/
+
+      - deploy-core-tagged:
+          context: org-global
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
             branches:
               ignore: /.*/
 
@@ -135,7 +151,7 @@ jobs:
             TAG: terraform-0.10.8
           <<: *build_terraform_image
 
-  build-stable:
+  deploy-stable:
     <<: *docker_image
     <<: *project_env_vars
     steps:
@@ -147,6 +163,20 @@ jobs:
           working_directory: ~/project/0.X
           environment:
           <<: *build_core_stable
+
+  deploy-core-tagged:
+    <<: *docker_image
+    <<: *project_env_vars
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          <<: *docker_login
+      - run:
+          working_directory: ~/project/0.X
+          environment:
+          <<: *build_core_tagged
+
 
   # trigger build_0.X off the tag not branch
   build_0.X:
