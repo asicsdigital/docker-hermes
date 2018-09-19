@@ -17,7 +17,7 @@ build_latest: &build_latest
 #    docker push $IMAGE_NAME:latest
 
 build_core_stable: &build_core_stable
-  name: "Docker Build Core Stable"
+  name: "Docker build and push asicsdigital/hermes:stable"
   command: |
     docker build --tag $IMAGE_NAME:stable .
     docker push $IMAGE_NAME:stable
@@ -66,14 +66,13 @@ workflows:
             branches:
               ignore: master
 
-  tagged-builds:
-    jobs:
       - build_and_deploy_stable:
           context: org-global
           filters:
             tags:
               only: /stable/
-
+            branches:
+              ignore: /.*/
 
 version: 2
 jobs:
