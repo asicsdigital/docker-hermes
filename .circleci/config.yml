@@ -66,7 +66,9 @@ workflows:
             branches:
               ignore: master
 
-      - build_and_deploy_stable:
+  stable-tag:
+    jobs:
+      - build-stable:
           context: org-global
           filters:
             tags:
@@ -135,7 +137,7 @@ jobs:
             TAG: terraform-0.10.8
           <<: *build_terraform_image
 
-  build_and_deploy_stable:
+  build-stable:
     <<: *docker_image
     <<: *project_env_vars
     steps:
