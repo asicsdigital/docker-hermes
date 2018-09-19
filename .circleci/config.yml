@@ -52,7 +52,7 @@ project_env_vars: &project_env_vars
 
 workflows:
   version: 2
-  build_and_deploy:
+  build_and_push:
     jobs:
       - build_and_deploy_0.X:
           context: org-global
@@ -60,17 +60,20 @@ workflows:
             branches:
               only: master
 
+      - build_0.X:
+          context: org-global
+          filters:
+            branches:
+              ignore: master
+
+  tagged-builds:
+    jobs:
       - build_and_deploy_stable:
           context: org-global
           filters:
             tags:
               only: /stable/
 
-      - build_0.X:
-          context: org-global
-          filters:
-            branches:
-              ignore: master
 
 version: 2
 jobs:
