@@ -54,7 +54,7 @@ workflows:
   version: 2
   build_and_push:
     jobs:
-      - build_and_deploy_0.X:
+      - build-v0.X:
           context: org-global
           filters:
             branches:
@@ -66,8 +66,6 @@ workflows:
             branches:
               ignore: master
 
-  stable-tag:
-    jobs:
       - build-stable:
           context: org-global
           filters:
@@ -78,7 +76,7 @@ workflows:
 
 version: 2
 jobs:
-  build_and_deploy_0.X:
+  build-v0.X:
     <<: *docker_image
     <<: *project_env_vars
     steps:
