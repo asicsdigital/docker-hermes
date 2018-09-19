@@ -71,8 +71,7 @@ workflows:
           filters:
             tags:
               only: stable-test
-            branches:
-              only: tfhartmann/updates_for_building_child_images
+            #branches:
               #ignore: /.*/
 
 version: 2
