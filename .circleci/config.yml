@@ -72,9 +72,9 @@ workflows:
           context: org-global
           filters:
             tags:
-              only: stable-test
-            #branches:
-              #ignore: /.*/
+              only: /^stable-test/
+            branches:
+              ignore: /.*/
 
 version: 2
 jobs:
