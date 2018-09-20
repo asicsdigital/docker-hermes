@@ -30,7 +30,6 @@ build_core_tagged: &build_core_tagged
     docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1,2 | sed 's/v//')
     docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1   | sed 's/v//')
     echo "pushing tags...."
-    docker push $IMAGE_NAME:$CIRCLE_TAG
     docker push $IMAGE_NAME:$(echo $CIRCLE_TAG | sed 's/v//')
     docker push $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1,2 | sed 's/v//')
     docker push $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1   | sed 's/v//')
