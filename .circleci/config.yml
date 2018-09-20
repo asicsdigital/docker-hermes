@@ -61,13 +61,13 @@ workflows:
   version: 2
   build_and_push:
     jobs:
-      - build-v0.X:
+      - build-v1.X:
           context: org-global
           filters:
             branches:
               only: master
 
-      - build_0.X:
+      - build_1.X:
           context: org-global
           filters:
             branches:
@@ -91,7 +91,7 @@ workflows:
 
 version: 2
 jobs:
-  build-v0.X:
+  build-v1.X:
     <<: *docker_image
     <<: *project_env_vars
     steps:
@@ -144,7 +144,7 @@ jobs:
             TAG: terraform-0.11.1
           <<: *build_terraform_image
       - run:
-          working_directory: ~/project/0.X/terraform
+          working_directory: ~/project/1.X/terraform
           environment:
             TF_VERSION: 0.10.8
             TAG: terraform-0.10.8
@@ -159,7 +159,7 @@ jobs:
       - run:
           <<: *docker_login
       - run:
-          working_directory: ~/project/0.X
+          working_directory: ~/project/1.X
           environment:
           <<: *build_core_stable
 
@@ -172,13 +172,13 @@ jobs:
       - run:
           <<: *docker_login
       - run:
-          working_directory: ~/project/0.X
+          working_directory: ~/project/1.X
           environment:
           <<: *build_core_tagged
 
 
-  # trigger build_0.X off the tag not branch
-  build_0.X:
+  # trigger build_1.X off the tag not branch
+  build_1.X:
     <<: *docker_image
     <<: *project_env_vars
     steps:
@@ -187,18 +187,18 @@ jobs:
       - run:
           <<: *docker_login
       - run:
-          working_directory: ~/project/0.X
+          working_directory: ~/project/1.X
           environment:
             TAG: core
           <<: *build_branches
       - run:
-          working_directory: ~/project/0.X/terraform
+          working_directory: ~/project/1.X/terraform
           environment:
             TAG: terraform
           <<: *build_branches
       # Test of this block
       - run:
-          working_directory: ~/project/0.X/terraform
+          working_directory: ~/project/1.X/terraform
           environment:
             TF_VERSION: 0.10.8
             TAG: terraform-0.10.8
