@@ -126,6 +126,7 @@ jobs:
             TAG: terraform-0.11.4
           <<: *build_terraform_image
       - run:
+          working_directory: ~/project/1.X/terraform
           environment:
             TF_VERSION: 0.11.3
             TAG: terraform-0.11.3
