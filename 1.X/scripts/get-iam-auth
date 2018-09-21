@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 # Script for outputting $HOME/.aws/credentials for use by terraform aws provider
+# shellcheck shell=bash
+set -e
+set -o pipefail
 
 VAULT_AWS_SECRET_ENGINE_ROLE="${VAULT_AWS_SECRET_ENGINE_ROLE:-hermes}"
 
