@@ -11,11 +11,14 @@ else
   exit 1
 fi
 
-if [ -e /bin/vault ]; then
+if [ -e "$(which vault)" ]; then
   if [[ "$VAULT_ADDR" ]]; then
     vault lease revoke $VAULT_LEASE_ID
   else
     echo "MISSING VAULT_ADDR"
     exit 1
   fi
+else
+  echo "can not find vault"
+  exit 1    
 fi

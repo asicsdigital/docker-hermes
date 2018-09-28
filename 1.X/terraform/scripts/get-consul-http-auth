@@ -4,7 +4,7 @@
 set -e
 set -o pipefail
 
-if [ -e /bin/vault ]; then
+if [ -e "$(which vault)" ]; then
   if [[ "$VAULT_ADDR" ]]; then
     CONSUL_JSON=$(vault read -format json -field data secret/consul)
     HTTP_AUTH=$(echo $CONSUL_JSON | jq -r .http_auth)
@@ -15,4 +15,7 @@ if [ -e /bin/vault ]; then
     echo "MISSING VAULT_ADDR"
     exit 1
   fi
+else
+  echo "can not find vault"
+  exit 1    
 fi
