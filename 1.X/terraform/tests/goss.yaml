@@ -17,7 +17,6 @@ file:
     contains: []
   /opt/hermes/bin/terraform:
     exists: true
-    mode: "0775"
     owner: root
     group: root
     filetype: file
