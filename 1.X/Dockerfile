@@ -2,8 +2,8 @@ FROM asicsdigital/dudewheresmy AS dudewheresmy
 
 # Download and verify the integrity of the download first
 FROM sethvargo/hashicorp-installer:0.1.3 AS installer
-ARG CONSUL_VERSION='1.2.2'
-ARG VAULT_VERSION='0.10.4'
+ARG CONSUL_VERSION='1.4.0'
+ARG VAULT_VERSION='0.11.1'
 RUN /install-hashicorp-tool "vault" "$VAULT_VERSION"
 RUN /install-hashicorp-tool "consul" "$CONSUL_VERSION"
 
@@ -14,6 +14,8 @@ COPY --from=installer /software/vault /opt/hermes/bin/vault
 COPY --from=installer /software/consul /opt/hermes/bin/consul
 COPY scripts/* /opt/hermes/bin/
 RUN /opt/hermes/bin/install-hermes-deps
+RUN curl -fsSL https://goss.rocks/install | GOSS_VER=v0.3.6 GOSS_DST=/opt/hermes/bin sh
 WORKDIR /root
 ENV PATH="/opt/hermes/bin:${PATH}"
+ADD tests /tests
 ENTRYPOINT ["/bin/bash"]

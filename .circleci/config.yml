@@ -13,18 +13,27 @@ build_latest: &build_latest
   name: "Docker build and push asicsdigital/hermes:latest"
   command: |
     docker build --tag $IMAGE_NAME:latest .
+    cd tests
+    export PATH=$PATH:~/bin
+    dgoss run -it  $IMAGE_NAME:latest
     docker push $IMAGE_NAME:latest
 
 build_core_stable: &build_core_stable
   name: "Docker build and push asicsdigital/hermes:stable"
   command: |
     docker build --tag $IMAGE_NAME:stable .
+    cd tests
+    export PATH=$PATH:~/bin
+    dgoss run -it  $IMAGE_NAME:stable
     docker push $IMAGE_NAME:stable
 
 build_core_tagged: &build_core_tagged
   name: "Docker build and push asicsdigital/hermes tagged releases"
   command: |
     docker build --tag $IMAGE_NAME:$CIRCLE_TAG .
+    cd tests
+    export PATH=$PATH:~/bin
+    dgoss run -it  $IMAGE_NAME:$CIRCLE_TAG
     docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | sed 's/v//')
     docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1,2 | sed 's/v//')
     docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1   | sed 's/v//')
@@ -38,6 +47,9 @@ build_terraform_image: &build_terraform_image
   command: |
     echo "Building image $IMAGE_NAME:$TAG"
     docker build --build-arg TF_VERSION=$TF_VERSION --tag $IMAGE_NAME:$TAG .
+    cd tests
+    export PATH=$PATH:~/bin
+    dgoss run -it $IMAGE_NAME:$TAG
     docker push $IMAGE_NAME:$TAG
 
 build_branches: &build_branches
@@ -49,6 +61,26 @@ build_branches: &build_branches
 project_env_vars: &project_env_vars
   environment:
     IMAGE_NAME: asicsdigital/hermes
+    GOSS_PATH:  /home/circleci/bin/goss
+    GOSS_FILES_STRATEGY: cp
+
+install_goss: &install_goss
+  name: Install goss
+  command: |
+    # rather than give internet scripts SU rights, we install to local user bin and add to path
+    mkdir ~/bin
+    export GOSS_DST=~/bin
+    export PATH=$PATH:~/bin
+    curl -fsSL https://goss.rocks/install | sh
+    goss -version
+
+run_tests: &run_tests
+  name: "Run goss Tests"
+  command: |
+    docker build . -t hermes:$TAG
+    cd tests
+    export PATH=$PATH:~/bin
+    dgoss run -it hermes:$TAG
 
 workflows:
   version: 2
@@ -93,8 +125,22 @@ jobs:
       - run:
           <<: *docker_login
       - run:
+          <<: *install_goss
+      - run:
           working_directory: ~/project/1.X
           <<: *build_latest
+      - run:
+          working_directory: ~/project/1.X/terraform
+          environment:
+            TF_VERSION: 0.11.10
+            TAG: terraform-0.11.10
+          <<: *build_terraform_image
+      - run:
+          working_directory: ~/project/1.X/terraform
+          environment:
+            TF_VERSION: 0.11.9
+            TAG: terraform-0.11.9
+          <<: *build_terraform_image
       - run:
           working_directory: ~/project/1.X/terraform
           environment:
@@ -159,6 +205,9 @@ jobs:
       - run:
           <<: *docker_login
       - run:
+          <<: *install_goss
+
+      - run:
           working_directory: ~/project/1.X
           environment:
           <<: *build_core_stable
@@ -172,6 +221,8 @@ jobs:
       - run:
           <<: *docker_login
       - run:
+          <<: *install_goss
+      - run:
           working_directory: ~/project/1.X
           environment:
           <<: *build_core_tagged
@@ -184,6 +235,18 @@ jobs:
       - setup_remote_docker
       - run:
           <<: *docker_login
+      - run:
+          <<: *install_goss
+      - run:
+          working_directory: ~/project/1.X
+          environment:
+            TAG: core
+          <<: *run_tests
+      - run:
+          working_directory: ~/project/1.X/terraform
+          environment:
+            TAG: terraform
+          <<: *run_tests
       - run:
           working_directory: ~/project/1.X
           environment:

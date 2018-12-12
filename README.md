@@ -16,3 +16,7 @@ We've bundled a number of helpers.
 * `VAULT_ADDR` - Address of the Vault server expressed as a URL and port, ex: `VAULT_ADDR="https://vault.example.com"``
 * `VAULT_PAYLOAD` - AppRole payload to auth to vault  `VAULT_PAYLOAD='{"role_id":"<ROLE_ID>","secret_id":"<SECRET_ID>"}'``
 * `VAULT_AWS_SECRET_ENGINE_ROLE` - Role name to pass to the AWS Secret Engine
+
+#### Adding Tests
+
+You can add tests by running `goss add <type> <thing>` and then adding that Yaml file to the tests directory, or updating the existing goss.yaml file if one exists. More informaiton about Goss tests can be found here: https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#important-note-about-goss-file-format

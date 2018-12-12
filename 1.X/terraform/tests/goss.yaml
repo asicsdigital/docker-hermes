@@ -1,0 +1,31 @@
+file:
+  /opt/hermes/bin/get-consul-htpasswd:
+    exists: true
+    mode: "0755"
+    size: 699
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+  /opt/hermes/bin/get-consul-http-auth:
+    exists: true
+    mode: "0755"
+    size: 647
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+  /opt/hermes/bin/terraform:
+    exists: true
+    mode: "0775"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+  /opt/hermes/bin/tflint:
+    exists: true
+    mode: "0755"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
