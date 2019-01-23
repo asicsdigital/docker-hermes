@@ -60,6 +60,34 @@ file:
     group: root
     filetype: file
     contains: []
+  /opt/hermes/bin/functions:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+  /opt/hermes/bin/get-vault-kv:
+    exists: true
+    mode: "0755"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+  /opt/hermes/bin/get-consul-kv:
+    exists: true
+    mode: "0755"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+  /opt/hermes/bin/put-consul-kv:
+    exists: true
+    mode: "0755"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
   /opt/hermes/bin/vault:
     exists: true
     mode: "0755"

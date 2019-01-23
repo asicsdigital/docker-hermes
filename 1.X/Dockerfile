@@ -3,7 +3,7 @@ FROM asicsdigital/dudewheresmy AS dudewheresmy
 # Download and verify the integrity of the download first
 FROM sethvargo/hashicorp-installer:0.1.3 AS installer
 ARG CONSUL_VERSION='1.4.0'
-ARG VAULT_VERSION='0.11.1'
+ARG VAULT_VERSION='1.0.2'
 RUN /install-hashicorp-tool "vault" "$VAULT_VERSION"
 RUN /install-hashicorp-tool "consul" "$CONSUL_VERSION"
 

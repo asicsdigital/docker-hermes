@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+# Script for outputing consul kv values
+set -e
+set -o pipefail
+source /opt/hermes/bin/functions
+
+if [ -e "$(which consul)" ]; then
+  if [[ "$VAULT_ADDR" ]]; then
+    auth_to_consul
+    consul_path=$1
+    consul_value=$2
+    put_consul_kv ${consul_path} ${consul_value}
+  else
+    echo "MISSING VAULT_ADDR"
+    exit 1
+  fi
+else
+  echo "can not find consul"
+  exit 1
+fi

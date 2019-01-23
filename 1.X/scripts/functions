@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -e
+set -o pipefail
+
+# Get value from Vault. Takes in two parameters <path> and  <field>
+function get_vault_kv {
+  vault_path=$1
+  vault_key=${2:-value}
+  if [[ "$VAULT_ADDR" ]]; then
+    #VAULT_KV=$(curl -s -H "X-Vault-Token: $(cat ~/.vault-token )" -X GET $VAULT_ADDR/v1/${vault_path} | jq -r .data.${vault_key})
+    VAULT_KV=$(vault kv get -field ${vault_key} ${vault_path})
+  fi
+}
+
+# PUT value from Consul prefix tasks a <path> parameters
+function put_consul_kv {
+  if [[ "$CONSUL_HTTP_ADDR" ]]; then
+    consul_path=$1
+    consul_value=$2
+    consul kv put ${consul_path} ${consul_value}
+  fi
+}
+
+# Get value from Consul prefix tasks a <path> parameters
+function get_consul_kv {
+  if [[ "$CONSUL_HTTP_ADDR" ]]; then
+    consul_path=$1
+    consul kv get $consul_path
+  fi
+}
+
+# Auth to Consul and set the correct env vars for use by other scripts and fucntions
+function auth_to_consul {
+  if [[ "$VAULT_ADDR" ]]; then
+    get_vault_kv "secret/consul" "http_auth"
+    CONSUL_HTTP_AUTH=$VAULT_KV
+    get_vault_kv "secret/consul" "http_addr"
+    CONSUL_HTTP_ADDR=$VAULT_KV
+    export CONSUL_HTTP_AUTH
+    export CONSUL_HTTP_ADDR
+  else
+    echo "MISSING VAULT_ADDR"
+    exit 1
+  fi
+}
