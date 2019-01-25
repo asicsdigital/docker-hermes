@@ -129,6 +129,27 @@ jobs:
       - run:
           working_directory: ~/project/1.X
           <<: *build_latest
+
+  deploy-stable:
+    <<: *docker_image
+    <<: *project_env_vars
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          <<: *docker_login
+      - run:
+          <<: *install_goss
+      - run:
+          working_directory: ~/project/1.X
+          environment:
+          <<: *build_core_stable
+      - run:
+          working_directory: ~/project/1.X/terraform
+          environment:
+            TF_VERSION: 0.11.11
+            TAG: terraform-0.11.11
+          <<: *build_terraform_image
       - run:
           working_directory: ~/project/1.X/terraform
           environment:
@@ -195,22 +216,6 @@ jobs:
             TF_VERSION: 0.10.8
             TAG: terraform-0.10.8
           <<: *build_terraform_image
-
-  deploy-stable:
-    <<: *docker_image
-    <<: *project_env_vars
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          <<: *docker_login
-      - run:
-          <<: *install_goss
-
-      - run:
-          working_directory: ~/project/1.X
-          environment:
-          <<: *build_core_stable
 
   deploy-core-tagged:
     <<: *docker_image
