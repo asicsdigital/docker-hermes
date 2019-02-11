@@ -28,3 +28,17 @@ file:
     group: root
     filetype: file
     contains: []
+  /opt/hermes/bin/terraform-provider-pingdom:
+    exists: true
+    mode: "0755"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+  /root/.terraform.d/plugins/linux_amd64/terraform-provider-pingdom:
+    exists: true
+    mode: "0777"
+    owner: root
+    group: root
+    filetype: symlink
+    contains: []

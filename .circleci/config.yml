@@ -63,6 +63,8 @@ project_env_vars: &project_env_vars
     IMAGE_NAME: asicsdigital/hermes
     GOSS_PATH:  /home/circleci/bin/goss
     GOSS_FILES_STRATEGY: cp
+    GOSS_OPTS: --format junit
+    GOSS_FILES_PATH: tests
 
 install_goss: &install_goss
   name: Install goss
@@ -78,9 +80,9 @@ run_tests: &run_tests
   name: "Run goss Tests"
   command: |
     docker build . -t hermes:$TAG
-    cd tests
     export PATH=$PATH:~/bin
-    dgoss run -it hermes:$TAG
+    mkdir -p ~/project/test-results/goss
+    dgoss run -it hermes:$TAG | tail -n +3 >> ~/project/test-results/goss/report.xml
 
 workflows:
   version: 2
@@ -262,3 +264,5 @@ jobs:
           environment:
             TAG: terraform
           <<: *build_branches
+      - store_test_results:
+          path: test-results
