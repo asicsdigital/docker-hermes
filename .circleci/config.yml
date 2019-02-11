@@ -13,27 +13,28 @@ build_latest: &build_latest
   name: "Docker build and push asicsdigital/hermes:latest"
   command: |
     docker build --tag $IMAGE_NAME:latest .
-    cd tests
     export PATH=$PATH:~/bin
-    dgoss run -it  $IMAGE_NAME:latest
+    mkdir -p ~/project/test-results/goss
+    dgoss run -it  $IMAGE_NAME:latest | tail -n +3 >> ~/project/test-results/goss/report.xml
     docker push $IMAGE_NAME:latest
 
 build_core_stable: &build_core_stable
   name: "Docker build and push asicsdigital/hermes:stable"
   command: |
     docker build --tag $IMAGE_NAME:stable .
-    cd tests
     export PATH=$PATH:~/bin
-    dgoss run -it  $IMAGE_NAME:stable
+    mkdir -p ~/project/test-results/goss
+    dgoss run -it  $IMAGE_NAME:stable | tail -n +3 >> ~/project/test-results/goss/report.xml
     docker push $IMAGE_NAME:stable
 
 build_core_tagged: &build_core_tagged
   name: "Docker build and push asicsdigital/hermes tagged releases"
   command: |
     docker build --tag $IMAGE_NAME:$CIRCLE_TAG .
-    cd tests
     export PATH=$PATH:~/bin
-    dgoss run -it  $IMAGE_NAME:$CIRCLE_TAG
+    mkdir -p ~/project/test-results/goss
+    dgoss run -it $IMAGE_NAME:$CIRCLE_TAG | tail -n +3 >> ~/project/test-results/goss/report.xml
+
     docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | sed 's/v//')
     docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1,2 | sed 's/v//')
     docker tag $IMAGE_NAME:$CIRCLE_TAG $IMAGE_NAME:$(echo $CIRCLE_TAG | cut -d\. -f 1   | sed 's/v//')
@@ -47,9 +48,9 @@ build_terraform_image: &build_terraform_image
   command: |
     echo "Building image $IMAGE_NAME:$TAG"
     docker build --build-arg TF_VERSION=$TF_VERSION --tag $IMAGE_NAME:$TAG .
-    cd tests
     export PATH=$PATH:~/bin
-    dgoss run -it $IMAGE_NAME:$TAG
+    mkdir -p ~/project/test-results/goss
+    dgoss run -it $IMAGE_NAME:$TAG | tail -n +3 >> ~/project/test-results/goss/report.xml
     docker push $IMAGE_NAME:$TAG
 
 build_branches: &build_branches
