@@ -5,7 +5,7 @@ set -e
 set -o pipefail
 
 # Package to install with apk
-APK_PKGS="git bash openssh curl jq"
+APK_PKGS="git bash openssh curl jq aws-cli"
 
 if [ -e /sbin/apk ]; then
   /sbin/apk add --update --no-cache $APK_PKGS
