@@ -108,5 +108,3 @@ package:
     installed: true
   python3:
     installed: true
-  awscli:
-    installed: true
