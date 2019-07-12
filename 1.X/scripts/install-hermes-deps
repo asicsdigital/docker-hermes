@@ -7,4 +7,4 @@ set -o pipefail
 # Package to install with apk
 APK_PKGS="git bash openssh curl jq python3"
 
-pip install awscli
+pip3 install awscli
