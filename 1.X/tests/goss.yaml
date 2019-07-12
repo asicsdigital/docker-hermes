@@ -39,7 +39,7 @@ file:
   /opt/hermes/bin/install-hermes-deps:
     exists: true
     mode: "0755"
-    size: 267
+    size: 274
     owner: root
     group: root
     filetype: file
@@ -105,4 +105,8 @@ package:
   jq:
     installed: true
   openssh:
+    installed: true
+  python3:
+    installed: true
+  aws:
     installed: true
