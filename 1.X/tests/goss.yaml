@@ -106,7 +106,3 @@ package:
     installed: true
   openssh:
     installed: true
-  python3:
-    installed: true
-  aws:
-    installed: true
