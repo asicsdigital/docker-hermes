@@ -108,5 +108,5 @@ package:
     installed: true
   python3:
     installed: true
-  aws:
-    installed:
+  pip3:
+    installed: true
