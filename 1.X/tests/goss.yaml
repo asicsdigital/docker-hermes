@@ -36,6 +36,13 @@ file:
     group: root
     filetype: file
     contains: []
+  /opt/hermes/bin/install-hermes-deps:
+    exists: true
+    mode: "0755"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
   /opt/hermes/bin/lease-revoke:
     exists: true
     mode: "0755"
