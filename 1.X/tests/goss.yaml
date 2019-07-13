@@ -29,6 +29,14 @@ file:
     group: root
     filetype: file
     contains: []
+  /opt/hermes/bin/invalidate-cloudfront-cache:
+    exists: true
+    mode: "0755"
+    size: 872
+    owner: root
+    group: root
+    filetype: file
+    contains: []
   /opt/hermes/bin/goss:
     exists: true
     mode: "0755"
