@@ -32,7 +32,7 @@ file:
   /opt/hermes/bin/invalidate-cloudfront-cache:
     exists: true
     mode: "0755"
-    size: 872
+    size: 1271
     owner: root
     group: root
     filetype: file
