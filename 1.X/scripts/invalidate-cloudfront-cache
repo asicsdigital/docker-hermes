@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+
+# Script for invalidating Cloudfront Cache. It expects an ENV var of CLOUDFRONT_ID.
+# First argument is a space separated list files, the second is true or false
+# which indicates that you would like this call to be blocking.
+# Eg:
+# ./invalidate-cloudfront-cache '/index.html /favicon.ico /js/index.js' true
+# ./invalidate-cloudfront-cache '/*' false
+
+set -e
+set -o pipefail
+
+if [[ "$CLOUDFRONT_ID" ]]; then
+  echo "triggering cloudfront cache invalidation"
+  COMMAND="aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths '$1'"
+  echo $COMMAND
+  RETVAL=$(eval $COMMAND)
+  echo $RETVAL | jq .
+  RETVAL_STATUS=$(echo $RETVAL| jq -r '.Invalidation.Status')
+  INVALIDATION_ID=$(echo $RETVAL| jq -r '.Invalidation.Id')
+  if [[ "$RETVAL_STATUS" != "InProgress" ]] ; then
+    echo "cloudfront invalidation not successful"
+    exit 1
+  elif [[ "$INVALIDATION_ID" && "$2" == "true" ]] ; then
+    echo "waiting for cache invalidation to complete..."
+    COMMAND="aws cloudfront wait invalidation-completed --distribution-id $CLOUDFRONT_ID --id $INVALIDATION_ID"
+    echo $COMMAND
+    RETVAL=$(eval $COMMAND)
+    echo "invalidation complete"
+  else
+    exit 0
+  fi
+else
+  echo "MISSING CLOUDFRONT_ID"
+  exit 1
+fi
