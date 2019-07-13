@@ -39,7 +39,7 @@ file:
   /opt/hermes/bin/install-hermes-deps:
     exists: true
     mode: "0755"
-    size: 267
+    size: 296
     owner: root
     group: root
     filetype: file
@@ -106,3 +106,10 @@ package:
     installed: true
   openssh:
     installed: true
+  python3:
+    installed: true
+command:
+  aws --version:
+    exit-status: 0
+    stderr: []
+    timeout: 10000
