@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Script for invalidating Cloudfront Cache. It expects an ENV var of CLOUDFRONT_ID
+# shellcheck shell=bash
+set -e
+set -o pipefail
+
+TIMESTAMP=$(date +"%s%N")
+if [[ "$CLOUDFRONT_ID" ]]; then
+  echo "triggering cloudfront cache invalidation"
+  CF_INVALIDATION_JSON=$(echo '{"DistributionId":"'$CLOUDFRONT_ID'","InvalidationBatch":{"Paths":{"Quantity":1,"Items":["/index.html"]},"CallerReference":"cf_invalidation_'$TIMESTAMP'}"}}' | jq -cM .)
+  COMMAND="aws cloudfront create-invalidation --distribution-id=$CLOUDFRONT_ID --cli-input-json='$CF_INVALIDATION_JSON'"
+  echo $COMMAND
+  RETVAL=$(eval $COMMAND)
+  echo $RETVAL | jq .
+  RETVAL_STATUS=$(echo $RETVAL| jq -r '.Invalidation.Status')
+  if [[ "$RETVAL_STATUS" != "InProgress" ]] ; then
+    echo "cloudfront invalidation not successful"
+    exit 1
+  fi
+else
+  echo "MISSING CLOUDFRONT_ID"
+  exit 1
+fi
