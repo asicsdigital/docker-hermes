@@ -13,7 +13,7 @@ set -o pipefail
 
 if [[ "$CLOUDFRONT_ID" ]]; then
   echo "triggering cloudfront cache invalidation"
-  COMMAND="aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths '$1'"
+  COMMAND="aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths $1"
   echo $COMMAND
   RETVAL=$(eval $COMMAND)
   echo $RETVAL | jq .
