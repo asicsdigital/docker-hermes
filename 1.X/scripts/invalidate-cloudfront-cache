@@ -10,6 +10,7 @@
 
 set -e
 set -o pipefail
+set -o noglob
 
 if [[ "$CLOUDFRONT_ID" ]]; then
   echo "triggering cloudfront cache invalidation"
