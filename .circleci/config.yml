@@ -71,7 +71,7 @@ install_goss: &install_goss
   name: Install goss
   command: |
     # rather than give internet scripts SU rights, we install to local user bin and add to path
-    mkdir ~/bin
+    mkdir -p ~/bin
     export GOSS_DST=~/bin
     export PATH=$PATH:~/bin
     curl -fsSL https://goss.rocks/install | sh
