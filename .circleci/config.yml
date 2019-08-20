@@ -126,7 +126,7 @@ workflows:
             branches:
               ignore: /.*/
 
-      - deploy-stable-node:
+      - deploy-node:
           context: org-global
           filters:
             tags:
