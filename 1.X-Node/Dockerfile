@@ -8,7 +8,7 @@ RUN /install-hashicorp-tool "vault" "$VAULT_VERSION"
 RUN /install-hashicorp-tool "consul" "$CONSUL_VERSION"
 
 FROM circleci/node
-RUN mkdir -p /opt/hermes/bin
+RUN sudo mkdir -p /opt/hermes/bin
 COPY --from=dudewheresmy /usr/bin/dudewheresmy /opt/hermes/bin/dudewheresmy
 COPY --from=installer /software/vault /opt/hermes/bin/vault
 COPY --from=installer /software/consul /opt/hermes/bin/consul
