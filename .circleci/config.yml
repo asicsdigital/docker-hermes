@@ -27,6 +27,15 @@ build_core_stable: &build_core_stable
     dgoss run -it  $IMAGE_NAME:stable | tail -n +3 >> ~/project/test-results/goss/report.xml
     docker push $IMAGE_NAME:stable
 
+build_core_stable_node: &build_core_stable_node
+  name: "Docker build and push asicsdigital/hermes:stable_node"
+  command: |
+    docker build --tag $IMAGE_NAME:stable_node .
+    export PATH=$PATH:~/bin
+    mkdir -p ~/project/test-results/goss
+    dgoss run -it  $IMAGE_NAME:stable_node | tail -n +3 >> ~/project/test-results/goss/report.xml
+    docker push $IMAGE_NAME:stable_node
+
 build_core_tagged: &build_core_tagged
   name: "Docker build and push asicsdigital/hermes tagged releases"
   command: |
@@ -117,6 +126,14 @@ workflows:
             branches:
               ignore: /.*/
 
+      - deploy-stable-node:
+          context: org-global
+          filters:
+            tags:
+              only: /^deploy-node-.+/
+            branches:
+              ignore: /.*/
+
 version: 2
 jobs:
   build-v1.X:
@@ -172,7 +189,7 @@ jobs:
             TF_VERSION: 0.11.14
             TAG: terraform-0.11.14
           <<: *build_terraform_image
-          
+
       - run:
           working_directory: ~/project/1.X/terraform
           environment:
@@ -257,6 +274,12 @@ jobs:
             TF_VERSION: 0.10.8
             TAG: terraform-0.10.8
           <<: *build_terraform_image
+      - run:
+          working_directory: ~/project/1.X-Node/terraform
+          environment:
+            TF_VERSION: 0.10.8
+            TAG: terraform-0.10.8
+          <<: *build_terraform_image
 
   deploy-core-tagged:
     <<: *docker_image
@@ -305,3 +328,18 @@ jobs:
           <<: *build_branches
       - store_test_results:
           path: test-results
+
+  deploy-node:
+    <<: *docker_image
+    <<: *project_env_vars
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          <<: *docker_login
+      - run:
+          <<: *install_goss
+      - run:
+          working_directory: ~/project/1.X-Node
+          environment:
+          <<: *build_core_stable_node
