@@ -14,7 +14,7 @@ COPY --from=installer /software/vault /opt/hermes/bin/vault
 COPY --from=installer /software/consul /opt/hermes/bin/consul
 COPY scripts/* /opt/hermes/bin/
 RUN  sudo pip3 install awscli
-RUN sudo curl -fsSL https://goss.rocks/install | GOSS_VER=v0.3.6 GOSS_DST=/opt/hermes/bin sh
+RUN sudo curl -fsSL https://goss.rocks/install | sudo GOSS_VER=v0.3.6 GOSS_DST=/opt/hermes/bin sh
 WORKDIR /root
 ENV PATH="/opt/hermes/bin:${PATH}"
 ADD tests /tests
