@@ -27,14 +27,14 @@ build_core_stable: &build_core_stable
     dgoss run -it  $IMAGE_NAME:stable | tail -n +3 >> ~/project/test-results/goss/report.xml
     docker push $IMAGE_NAME:stable
 
-build_core_stable_node: &build_core_stable_node
+build_core_node: &build_core_node
   name: "Docker build and push asicsdigital/hermes:stable_node"
   command: |
-    docker build --tag $IMAGE_NAME:stable_node .
+    docker build --tag $IMAGE_NAME:node -f ../Node/Dockerfile .
     export PATH=$PATH:~/bin
     mkdir -p ~/project/test-results/goss
-    dgoss run -it  $IMAGE_NAME:stable_node | tail -n +3 >> ~/project/test-results/goss/report.xml
-    docker push $IMAGE_NAME:stable_node
+    dgoss run -it  $IMAGE_NAME:node | tail -n +3 >> ~/project/test-results/goss/report.xml
+    docker push $IMAGE_NAME:node
 
 build_core_tagged: &build_core_tagged
   name: "Docker build and push asicsdigital/hermes tagged releases"
@@ -340,6 +340,6 @@ jobs:
       - run:
           <<: *install_goss
       - run:
-          working_directory: ~/project/1.X-Node
+          working_directory: ~/project/1.X
           environment:
-          <<: *build_core_stable_node
+          <<: *build_core_node
