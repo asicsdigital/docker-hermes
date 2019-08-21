@@ -2,7 +2,7 @@
 # Script for install package dependencies to hermes images
 # shellcheck shell=bash
 set -e
-#set -o pipefail
+set -o pipefail
 
 # Package to install with apk
 APK_PKGS="git bash openssh curl jq python3"
