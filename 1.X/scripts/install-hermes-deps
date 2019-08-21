@@ -11,4 +11,4 @@ if [ -e /sbin/apk ]; then
   /sbin/apk add --update --no-cache $APK_PKGS
 fi
 
-pip3 install awscli
+pip3 install awscli4
