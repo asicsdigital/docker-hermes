@@ -7,7 +7,7 @@ ARG VAULT_VERSION='1.0.2'
 RUN /install-hashicorp-tool "vault" "$VAULT_VERSION"
 RUN /install-hashicorp-tool "consul" "$CONSUL_VERSION"
 
-FROM python:3-node
+FROM circleci/python:3-node
 RUN  sudo mkdir -p /opt/hermes/bin
 COPY --from=dudewheresmy /usr/bin/dudewheresmy /opt/hermes/bin/dudewheresmy
 COPY --from=installer /software/vault /opt/hermes/bin/vault
