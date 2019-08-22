@@ -272,12 +272,6 @@ jobs:
             TF_VERSION: 0.10.8
             TAG: terraform-0.10.8
           <<: *build_terraform_image
-      - run:
-          working_directory: ~/project/1.X-Node/terraform
-          environment:
-            TF_VERSION: 0.10.8
-            TAG: terraform-0.10.8
-          <<: *build_terraform_image
 
   deploy-core-tagged:
     <<: *docker_image
