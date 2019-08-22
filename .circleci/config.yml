@@ -336,8 +336,6 @@ jobs:
       - run:
           <<: *docker_login
       - run:
-          <<: *install_goss
-      - run:
           working_directory: ~/project/1.X
           environment:
           <<: *build_core_node
