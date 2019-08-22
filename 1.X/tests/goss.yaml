@@ -112,8 +112,8 @@ package:
     installed: true
   jq:
     installed: true
-  openssh:
-    installed: true
+#  openssh:
+#    installed: true
   python3:
     installed: true
 command:
