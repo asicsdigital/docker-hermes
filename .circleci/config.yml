@@ -32,8 +32,6 @@ build_core_node: &build_core_node
   command: |
     docker build --tag $IMAGE_NAME:node -f ../Node/Dockerfile .
     export PATH=$PATH:~/bin
-#    mkdir -p ~/project/test-results/goss
-#    dgoss run -it  $IMAGE_NAME:node | tail -n +3 >> ~/project/test-results/goss/report.xml
     docker push $IMAGE_NAME:node
 
 build_core_tagged: &build_core_tagged
