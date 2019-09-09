@@ -166,6 +166,42 @@ jobs:
       - run:
           working_directory: ~/project/1.X/terraform
           environment:
+            TF_VERSION: 0.12.8
+            TAG: terraform-0.12.8
+          <<: *build_terraform_image
+      - run:
+          working_directory: ~/project/1.X/terraform
+          environment:
+            TF_VERSION: 0.12.7
+            TAG: terraform-0.12.7
+          <<: *build_terraform_image
+      - run:
+          working_directory: ~/project/1.X/terraform
+          environment:
+            TF_VERSION: 0.12.6
+            TAG: terraform-0.12.6
+          <<: *build_terraform_image
+      - run:
+          working_directory: ~/project/1.X/terraform
+          environment:
+            TF_VERSION: 0.12.5
+            TAG: terraform-0.12.5
+          <<: *build_terraform_image
+      - run:
+          working_directory: ~/project/1.X/terraform
+          environment:
+            TF_VERSION: 0.12.4
+            TAG: terraform-0.12.4
+          <<: *build_terraform_image
+      - run:
+          working_directory: ~/project/1.X/terraform
+          environment:
+            TF_VERSION: 0.12.3
+            TAG: terraform-0.12.3
+          <<: *build_terraform_image
+      - run:
+          working_directory: ~/project/1.X/terraform
+          environment:
             TF_VERSION: 0.12.2
             TAG: terraform-0.12.2
           <<: *build_terraform_image
